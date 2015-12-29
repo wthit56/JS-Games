@@ -1,78 +1,57 @@
-function Game(config) {
-	var DOM = IO.createCanvas();
-	if (!DOM) {
-		DOM = this.DOM = document.createElement("DIV");
-		DOM.innerText = "Canvas is not support by this browser.";
-	}
-	else {
-		DOM.width = window.innerWidth; DOM.height = window.innerHeight;
-		DOM.context.fillRect(0, 0, DOM.width, DOM.height);
-		
-		var altDOM = IO.createCanvas();
-		altDOM.dataset.alt = true;
-		altDOM.context.fillStyle = "red";
-		
-		this.swapDOM = function() {
-			DOM.width = DOM.height = 0;
-			altDOM.width = window.innerWidth; altDOM.height = window.innerHeight;
-			
-			this.DOM = altDOM;
-			off = DOM; DOM = altDOM; altDOM = off; off = null;
-		};
-		
-		var tick = this.tick = (function() {
-			raf(tick);
-			
-			this.swapDOM();
-			
-			this.update();
-			this.draw();
-		}).bind(this);
-		
-		var y = 0;
-		
-		this.update = function() {
-			var DOM = this.DOM, context = DOM.context;
-			
-			y++;
-		};
-		this.draw = function() {
-			var DOM = this.DOM, context = DOM.context;
-			context.fillStyle = "#AEE4F9";
-			context.fillRect(0, 0, DOM.width, DOM.height);
-			
-			context.strokeStyle = "red";
-			context.strokeRect(100.5, y + 0.5, 100, 100);
-			
-			context.drawImage(assets["skyline_hills"], 0, 0);
-			context.drawImage(assets["skyline_trees"], 0, 65);
-		};
-		
-		var loader = Loader.base("graphics/$&.png").images("skyline_hills,skyline_trees".split(",")).then(function() {
-			assets["skyline_hills"] = tintImage(assets["skyline_hills"], "#1C921C", altDOM);
-			assets["skyline_trees"] = tintImage(assets["skyline_trees"], "#234D37", altDOM);
-			altDOM.width = altDOM.height = 0;
-			
-			console.log("start");
-			raf(tick);
-		});
-		var assets = loader.assets;
-		console.log(window.loader = loader);
-	}
-}
-
-function tintImage(img, hex, canvas) {
+if (!canvas) { alert("Your browser does not support canvas."); }
+else {
+	canvas.width = 864; canvas.height = 480;
+	
+	
 	var ctx = canvas.context;
-	canvas.width = img.width; canvas.height = img.height;
+	ctx.imageSmoothingEnabled = false;
+	//ctx.fillStyle = "red"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+	var zoom = 2;
+	ctx.scale(zoom, zoom);
+
+	var camera = { x: 0, y: 0 };
+	var movementSpeed = 100 / 1000;
 	
-	ctx.fillStyle = hex;
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	var parallax = Loader.base("graphics/$&.png").images("skyline_hills,skyline_trees".split(",")).then(function() {
+		var hills = parallax.assets["skyline_hills"] = tintImage(parallax.assets["skyline_hills"], "#1C921C");
+		hills.distance = 5;
+		hills.top = 0;
+		
+		var trees = parallax.assets["skyline_trees"] = tintImage(parallax.assets["skyline_trees"], "#234D37");
+		trees.distance = 1;
+		trees.top = 60;
+		
+		parallax.draw = function() {
+			drawProp(parallax.assets["skyline_hills"]);
+			drawProp(parallax.assets["skyline_trees"]);
+		};
+		function drawProp(prop) {
+			ctx.drawImage(prop, camera.x / prop.distance, prop.top);
+		}
+		
+		tick();
+	});
+
+	var previousFrame = performance.now(), delta;
+	var tick = function(time) {
+		requestAnimationFrame(tick);
+		delta = time - previousFrame;
+		update(delta);
+		draw(delta);
+		previousFrame = time;
+	};
 	
-	ctx.globalCompositeOperation = "destination-in";
-	
-	ctx.drawImage(img, 0, 0);
-	
-	var new_img = new Image();
-	new_img.src = canvas.toDataURL();
-	return new_img;
+	var draw = function() {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		parallax.draw();
+	};
+	var update = function(delta) {
+		if (Input.left) {
+			camera.x += delta * movementSpeed;
+		}
+		else if (Input.right) {
+			camera.x -= delta * movementSpeed;
+		}
+	};
 }

@@ -10,7 +10,6 @@ Loader.prototype = {
 	},
 	images: function() {
 		var complete = (function() {
-			console.log("complete");
 			this.loader.complete++;
 			this.loader.assets[this.name] = this;
 			this.onload = null;
@@ -31,7 +30,6 @@ Loader.prototype = {
 				if (this.config.base) { src = src.replace(/[\W\w]*/, this.config.base); }
 				img.loader = this;
 				img.onload = complete;
-				console.log("start loading " + src);
 				img.src = src;
 			}
 			else {
