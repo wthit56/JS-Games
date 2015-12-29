@@ -1,1 +1,1 @@
-node "C:\Users\Thomas Giles\JavaScript\Quick-Host\run.js" .\ 8003
+"c:\users\thomas giles\javascript\quick-host\cli" "%~dp0\" 8003
