@@ -9,7 +9,7 @@ Graphic.prototype = {
 		var fx, fy, fw, fh,
 			tw, th, to;
 		return function Graphic__draw(ctx) {
-			x = this.x; y = this.y;
+			x = this.x || 0; y = this.y || 0;
 			if (this.camera) { x -= this.camera.x; y -= this.camera.y; }
 			if (("distance" in this) && (this.distance !== 1)) {
 				x /= this.distance; y /= this.distance;
@@ -19,11 +19,13 @@ Graphic.prototype = {
 			if (this.from || to) {
 				if (this.from) {
 					fx = this.from.x; fy = this.from.y; fw = this.from.width; fh = this.from.height;
+					if (isNaN(fx + fy + fw + fh)) { throw new Error("Graphic: instance.from must be fully defined."); }
+					else if (fx < 0 || fy < 0 || fx + fw > this.src.width || fy + fh > this.src.height) { throw new Error("Graphic: instance.from area must be within the instance.src image."); }
 				}
 				else {
-					fw = this.src.width; fh = this.src.height;
+					fx = 0; fy = 0; fw = this.src.width; fh = this.src.height;
 				}
-				
+
 				tw = ("width" in this) ? this.width : fw;
 				th = ("height" in this) ? this.height : fh;
 				
@@ -40,3 +42,7 @@ Graphic.prototype = {
 		};
 	})()
 };
+
+if (typeof module !== "undefined") {
+	module.exports = Graphic;
+}
