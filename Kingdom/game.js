@@ -1,3 +1,4 @@
+// https://github.com/noio/kingdom/tree/master/assets/gfx
 if (!canvas) { alert("Your browser does not support canvas."); }
 else {
 	canvas.width = 864; canvas.height = 480;
@@ -12,38 +13,20 @@ else {
 	ctx.imageSmoothingEnabled = false;
 	//ctx.fillStyle = "red"; ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
-	var graphics = Loader.base("graphics/$&.png").images("skyline_hills,skyline_trees,cobblestones".split(",")).then(function() {
-		var hills = tintImage(graphics.assets["skyline_hills"], "#1C921C");
-		hills.name = "skyline_hills";
-		hills.distance = 5;
-		hills.top = 0;
-		hills.minX = -hills.width + view.width;
-		
-		var trees = tintImage(graphics.assets["skyline_trees"], "#234D37");
-		trees.name = "skyline_trees";
-		trees.distance = 2;
-		trees.top = 60;
-		trees.minX = -trees.width + view.width;
-		
-		var cobblestones = graphics.assets["cobblestones"];
-		cobblestones.top = 180;
-		cobblestones.distance = 1;
-		
-		var hills2 = Graphic(tintImage(graphics.assets["skyline_hills"], "#1C921C"), { x: 0, y: 0, camera: camera, width: 100, height: 100 });
+	var graphics = Loader.base("graphics/$&.png").images("skyline_hills,skyline_trees,cobblestones,water".split(",")).then(function() {
+		var hills = Graphic(tintImage(graphics.assets["skyline_hills"], "#1C921C"), { x: 0, y: -50, camera: camera, distance: 5, repeat: "x", canvas: canvas, name: "hills" });
+		var trees = Graphic(tintImage(graphics.assets["skyline_trees"], "#234D37"), { x: 0, y: 0, camera: camera, distance: 2, repeat: "x", canvas: canvas, name: "trees" });
+		var cobblestones = new Graphic(graphics.assets["cobblestones"], { y: 130, camera: camera, distance: 1, repeat: "x", canvas: canvas });
+		var water = new Graphic(graphics.assets["water"], { y: 160, camera: camera, distance: 0.9, repeat: { x: true }, canvas: canvas });
+		var water2 = new Graphic(graphics.assets["water"], { y: 190, camera: camera, distance: 0.75, repeat: { x: true }, canvas: canvas });
 		
 		graphics.draw = function() {
-			//drawProp(hills);
-			//drawProp(trees);
-			//drawProp(cobblestones);
-			hills2.draw(ctx, camera);
+			hills.draw(ctx);
+			trees.draw(ctx);
+			cobblestones.draw(ctx);
+			water.draw(ctx);
+			water2.draw(ctx);
 		};
-		function drawProp(prop) {
-			var x = -camera.x / prop.distance;
-			x = x % prop.width;
-			if (x > 0) { ctx.drawImage(prop, x - prop.width, prop.top); }
-			else if (x < prop.minX) { ctx.drawImage(prop, x + prop.width, prop.top); }
-			ctx.drawImage(prop, x, prop.top);
-		}
 		
 		tick();
 	});
