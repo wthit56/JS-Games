@@ -1,30 +1,33 @@
 var parallax = (function() {
-	var result = { x: 0, y: 0 };
+	var result = { x: 0, y: 0 }, z;
+	var nullOffset = { x: 0, y: 0 };
 	var parallax = function(position) {
-		result.x = (position.x - (parallax.camera.x / position.z)) | 0;
-		result.y = (position.y - (parallax.camera.y / position.z)) | 0;
+		var offset = position.offset || nullOffset;
+		z = ("z" in position ? position.z : 1);
+		result.x = (position.x + offset.x - (parallax.camera.x / z)) | 0;
+		result.y = (position.y + offset.y - (parallax.camera.y / z)) | 0;
 		return result;
 	};
-	parallax.draw = function(obj) {
-		var pos = parallax(obj.position);
-		ctx.drawImage(obj, pos.x | 0, pos.y | 0);
+	parallax.draw = function(graphic, position) {
+		var pos = parallax(graphic.position || position);
+		ctx.drawImage(graphic, pos.x | 0, pos.y | 0);
 	};
-	parallax.draw.repeatX = function(obj) {
-		var pos = parallax(obj.position);
-		pos.x %= obj.width;
-		if ((pos.x < canvas.width) && (pos.x + obj.width > 0)) {
-			ctx.drawImage(obj, pos.x, pos.y);
+	parallax.draw.repeatX = function(graphic, position) {
+		var pos = parallax(graphic.position || position);
+		pos.x %= graphic.width;
+		if ((pos.x < canvas.width) && (pos.x + graphic.width > 0)) {
+			ctx.drawImage(graphic, pos.x, pos.y);
 		}
 		if (pos.x > 0) {
 			while (pos.x > 0) {
-				pos.x -= obj.width;
-				ctx.drawImage(obj, pos.x, pos.y);
+				pos.x -= graphic.width;
+				ctx.drawImage(graphic, pos.x, pos.y);
 			}
 		}
-		if (pos.x + obj.width < canvas.width) {
-			while (pos.x + obj.width < canvas.width) {
-				pos.x += obj.width;
-				ctx.drawImage(obj, pos.x, pos.y);
+		if (pos.x + graphic.width < canvas.width) {
+			while (pos.x + graphic.width < canvas.width) {
+				pos.x += graphic.width;
+				ctx.drawImage(graphic, pos.x, pos.y);
 			}
 		}
 	};
