@@ -1,1 +1,1 @@
-"c:\users\thomas giles\javascript\quick-host\cli" "%~dp0\" 8003
+"F:\javascript\quick-host\cli" "%~dp0\" 8003
