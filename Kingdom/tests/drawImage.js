@@ -69,6 +69,9 @@ test({ img: img,
 	
 //*/
 
+// ######### TODO: tests for src size, should be reflected in default dest size
+
+
 /*
 void ctx.drawImage(image, dx, dy);
 void ctx.drawImage(image, dx, dy, dWidth, dHeight);
