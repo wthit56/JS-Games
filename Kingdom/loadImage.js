@@ -1,4 +1,4 @@
-if (typeof Image === "undefined") { Image = require("./Image.js"); }
+if (typeof Image === "undefined") { Image = require("./tests/Image.js"); }
 
 loadImage = (function() {
 	var filename = /%f/;

@@ -1,9 +1,7 @@
 console.log(require("inline-test/markup")(eval("(" + require("inline-test")(function() {
 
 
-var loadImage, p, t;
-
-loadImage = require("../loadImage.js");
+var loadImage = require("../loadImage.js");
 loadImage instanceof Function; ///
 
 function callback(progress) {
@@ -16,8 +14,9 @@ callback.reset = function() {
 	return callback;
 }
 
-t = "graphics/%f.png";
-p = loadImage(t, ["filename", "file2"], callback.reset());
+var t = "graphics/%f.png",
+	p = loadImage(t, ["filename", "file2"], callback.reset());
+
 if (p != null) {
 	true; /// object returned
 	
