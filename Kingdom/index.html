@@ -1,0 +1,64 @@
+<!doctype html>
+<script src="loadImage.js" type="text/javascript"></script>
+<script src="drawImage.js" type="text/javascript"></script>
+<script src="raf.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var canvas = document.createElement("CANVAS"), ctx = canvas.getContext("2d");
+	
+	var start = 500, walk, frameDur = 1000 / 10;
+	var king = {
+		update: function(timeDiff, time) {
+			var x = -64 + ((time * (35 / 1000)) % 364);
+			this.image.dest.pos.x = x;
+			
+			var i = (((time - start) / frameDur) | 0) % walk.length;
+			console.log(i);
+			this.image.src.pos = walk[i];
+		},
+		draw: function(ctx) {
+			if (this.image) {
+				this.image.draw(ctx);
+			}
+		},
+		init: function() {
+			var s = 64;
+			this.image.src = { pos: { x: 0, y: 0 }, size: { x: s, y: s } };
+			walk = [ 0, 1, 2, 3, 4, 5, 6, 7 ].map(function(v) {
+				return { x: s * v, y: 0 };
+			});
+			console.log(walk);
+		}
+	};
+	var loaded = false, i = 0;
+	
+	loadImage("graphics/%f.png", ["king"], function imagesLoaded(p) {
+		king.image = { img: p.images["king"], draw: drawImage,
+			dest: { pos: { x: 0, y: 0 } }
+		};
+		king.init();
+		loaded = true;
+	});
+	
+	window.addEventListener("load", function() {
+		document.body.appendChild(canvas);
+		var timeLast = 0, timeDiff;
+		(function frame(time) {
+			//console.log("frame");
+			
+			canvas.width = canvas.width;
+			
+			timeDiff = time - timeLast;
+			// console.log(time, timeLast, timeDiff);
+			
+			if (loaded) {
+				king.update(timeDiff, time);
+				king.draw(ctx);
+				king.image.dest.pos.x++;
+			}
+			
+			timeLast = time;
+			
+			raf(frame);
+		})(0);
+	});
+</script>
