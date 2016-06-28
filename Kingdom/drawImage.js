@@ -1,10 +1,9 @@
 drawImage = (function() {
 	var spx, spy, ssx, ssy,
-		dpx, dpy, dsx, dsy;
+		dpx, dpy, ds, dsx, dsy;
 	
 	spx = spy = ssx = ssy = dpx = dpy = dsx = dsy = 0;
 
-	
 	function drawImage(ctx) {
 		if (!this.img) { return; }
 		else if (!ctx) {
@@ -13,7 +12,7 @@ drawImage = (function() {
 		}
 		else {
 			spx = spy = 0; ssx = this.img.width; ssy = this.img.height;
-			dpx = dpy = 0; dsx = this.img.width; dsy = this.img.height;
+			dpx = dpy = 0; ds = false; dsx = this.img.width; dsy = this.img.height;
 			if (this.src) {
 				if (this.src.pos) {
 					spx = this.src.pos.x;
@@ -30,6 +29,7 @@ drawImage = (function() {
 					dpy = this.dest.pos.y;
 				}
 				if (this.dest.size) {
+					ds = true;
 					dsx = this.dest.size.x;
 					dsy = this.dest.size.y;
 				}
@@ -42,7 +42,7 @@ drawImage = (function() {
 			*/
 			
 			if (spx !== 0 || spy !== 0 || ssx !== this.img.width || ssy !== this.img.height) {
-				ctx.drawImage(this.img, spx, spy, ssx, ssy, dpx, dpy, dsx, dsy);
+				ctx.drawImage(this.img, spx, spy, ssx, ssy, dpx, dpy, ds ? dsx : ssx, ds ? dsy : ssy);
 			}
 			else if /* no src && */ (dsx !== this.img.width || dsy !== this.img.height) {
 				ctx.drawImage(this.img, dpx, dpy, dsx, dsy);

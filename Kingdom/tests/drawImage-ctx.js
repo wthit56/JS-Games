@@ -1,6 +1,6 @@
 var ctx = { drawImage: function() {
 	this.called = true; this.actual = arguments;
-	if (arguments.length === this.expected.length) {
+	if (this.expected && (arguments.length === this.expected.length)) {
 		true; /// same length
 		for (var i = 0, l = arguments.length; i < l; i++) {
 			if (arguments[i] === this.expected[i]) {
