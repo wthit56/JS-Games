@@ -1,0 +1,12 @@
+loadImage(template, files, oncomplete)
+template : "before %f after", "%f" = filename
+files: ["filename", "filename2"]
+oncomplete: function(progress), context = last image to load
+	progress = { complete: bool, loaded: int, total: int, template: str, images: obj hash, oncomplete: function }
+
+drawImage(ctx), context = used as configuration for drawing
+ctx : 2D canvas context
+configuration = { img: Image,
+	src: { pos: { x: int, y: int }, size: { x: int, y: int } },
+	dest: { pos: { x: int, y: int }, size: { x: int, y: int } }
+}
