@@ -5,7 +5,7 @@ function sprite(image, frameSize) {
 	
 	for (var x, y = 0; y + fy <= iy; y += fy) {
 		for (x = 0; x + fx <= ix; x += fx) {
-			result.push({ pos: { x: x, y: y }, size: frameSize });
+			result.push({ x: x, y: y });
 		}
 	}
 	

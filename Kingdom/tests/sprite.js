@@ -8,14 +8,11 @@ var frameSize = { x: 5, y: 5 }
 var s = sprite(img, frameSize);
 s.length === 6; ///
 
-var p = s.map(function(src) { return src.pos; });
-p[0].x === 0 && p[0].y === 0; ///
-p[1].x === 5 && p[1].y === 0; ///
-p[2].x === 0 && p[2].y === 5; ///
-p[3].x === 5 && p[3].y === 5; ///
-p[4].x === 0 && p[4].y === 10; ///
-p[5].x === 5 && p[5].y === 10; ///
-
-s.every(function(src) { return src.size.x === frameSize.x && src.size.y === frameSize.y; }); ///
+s[0].x === 0 && s[0].y === 0; ///
+s[1].x === 5 && s[1].y === 0; ///
+s[2].x === 0 && s[2].y === 5; ///
+s[3].x === 5 && s[3].y === 5; ///
+s[4].x === 0 && s[4].y === 10; ///
+s[5].x === 5 && s[5].y === 10; ///
 
 }) + ")()")));
