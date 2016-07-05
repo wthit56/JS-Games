@@ -2,40 +2,44 @@
 <script src="loadImage.js" type="text/javascript"></script>
 <script src="drawImage.js" type="text/javascript"></script>
 <script src="raf.js" type="text/javascript"></script>
+<script src="sprite.js" type="text/javascript"></script>
+<script src="fbf.js" type="text/javascript"></script>
 <script type="text/javascript">
 	var canvas = document.createElement("CANVAS"), ctx = canvas.getContext("2d");
+	canvas.width = 100;
+	canvas.style.cssText = "image-rendering:pixelated";
 	
-	var start = 500, walk, frameDur = 1000 / 10;
+	var x, kSprite, walkFBF, frameDur = 1000 / 10;
 	var king = {
 		update: function(timeDiff, time) {
-			var x = -64 + ((time * (35 / 1000)) % 364);
+			x = -64 + ((time * (35 / 1000)) % (canvas.width + 64));
 			this.image.dest.pos.x = x;
-			
-			var i = (((time - start) / frameDur) | 0) % walk.length;
-			console.log(i);
-			this.image.src.pos = walk[i];
+			walkFBF.update(time);
+			this.image.src.pos = kSprite[walkFBF.index];
 		},
 		draw: function(ctx) {
 			if (this.image) {
 				this.image.draw(ctx);
 			}
 		},
-		init: function() {
+		init: function(srcImage, time) {
+			var img = king.image = { img: srcImage, draw: drawImage,
+				dest: { pos: { x: 0, y: 0 } }
+			};
+			
 			var s = 64;
-			this.image.src = { pos: { x: 0, y: 0 }, size: { x: s, y: s } };
-			walk = [ 0, 1, 2, 3, 4, 5, 6, 7 ].map(function(v) {
-				return { x: s * v, y: 0 };
-			});
-			console.log(walk);
+			img.src = { pos: { x: 0, y: 0 }, size: { x: s, y: s } };
+			kSprite = sprite(img.img, img.src.size);
+			walkFBF = fbf(1000 / 10, 8);
+			walkFBF.start(time);
 		}
 	};
 	var loaded = false, i = 0;
 	
 	loadImage("graphics/%f.png", ["king"], function imagesLoaded(p) {
-		king.image = { img: p.images["king"], draw: drawImage,
-			dest: { pos: { x: 0, y: 0 } }
-		};
-		king.init();
+		var time = performance.now();
+		
+		king.init(p.images["king"], time);
 		loaded = true;
 	});
 	
