@@ -4,42 +4,22 @@
 <script src="raf.js" type="text/javascript"></script>
 <script src="sprite.js" type="text/javascript"></script>
 <script src="fbf.js" type="text/javascript"></script>
+
+<script src="king.js" type="text/javascript"></script>
+<script src="terrain.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 	var canvas = document.createElement("CANVAS"), ctx = canvas.getContext("2d");
 	canvas.width = 100;
 	canvas.style.cssText = "image-rendering:pixelated";
 	
-	var x, kSprite, walkFBF, frameDur = 1000 / 10;
-	var king = {
-		update: function(timeDiff, time) {
-			x = -64 + ((time * (35 / 1000)) % (canvas.width + 64));
-			this.image.dest.pos.x = x;
-			walkFBF.update(time);
-			this.image.src.pos = kSprite[walkFBF.index];
-		},
-		draw: function(ctx) {
-			if (this.image) {
-				this.image.draw(ctx);
-			}
-		},
-		init: function(srcImage, time) {
-			var img = king.image = { img: srcImage, draw: drawImage,
-				dest: { pos: { x: 0, y: 0 } }
-			};
-			
-			var s = 64;
-			img.src = { pos: { x: 0, y: 0 }, size: { x: s, y: s } };
-			kSprite = sprite(img.img, img.src.size);
-			walkFBF = fbf(1000 / 10, 8);
-			walkFBF.start(time);
-		}
-	};
-	var loaded = false, i = 0;
-	
-	loadImage("graphics/%f.png", ["king"], function imagesLoaded(p) {
+	var loaded = false;
+
+	loadImage("graphics/%f.png", ["king", "cobblestones"], function imagesLoaded(p) {
 		var time = performance.now();
 		
-		king.init(p.images["king"], time);
+		king.init(time, p.images["king"]);
+		terrain.init(time, p.images["cobblestones"]);
 		loaded = true;
 	});
 	
@@ -47,17 +27,16 @@
 		document.body.appendChild(canvas);
 		var timeLast = 0, timeDiff;
 		(function frame(time) {
-			//console.log("frame");
-			
-			canvas.width = canvas.width;
-			
+			canvas.width = canvas.width; // clear canvas
 			timeDiff = time - timeLast;
-			// console.log(time, timeLast, timeDiff);
 			
 			if (loaded) {
 				king.update(timeDiff, time);
+				terrain.update(timeDiff, time);
+				
+				terrain.draw.back(ctx);
 				king.draw(ctx);
-				king.image.dest.pos.x++;
+				terrain.draw.front(ctx);
 			}
 			
 			timeLast = time;
