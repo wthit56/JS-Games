@@ -3,10 +3,30 @@ template : "before %f after", "%f" = filename
 files: ["filename", "filename2"]
 oncomplete: function(progress), context = last image to load
 	progress = { complete: bool, loaded: int, total: int, template: str, images: obj hash, oncomplete: function }
+returns = {} // TODO
 
 drawImage(ctx), context = used as configuration for drawing
 ctx : 2D canvas context
-configuration = { img: Image,
+usage = { img: Image,
 	src: { pos: { x: int, y: int }, size: { x: int, y: int } },
-	dest: { pos: { x: int, y: int }, size: { x: int, y: int } }
+	dest: { pos: { x: int, y: int }, size: { x: int, y: int } },
+	draw: drawImage
 }
+
+sprite(Image, frameSize)
+Image: image for source size reference
+frameSize : { x: int, y: int }
+returns = [srcPos, srcPos, ...]
+	srcPos : { x: int, y: int }
+
+fbf(fDur, fCount)
+fDur : ms duration of each frame
+fCount : number of frames in the animation
+returns =  { duration: fDur, count: fCount, index: int[0 - (fCount-1)],
+	started: 0, paused: 0, playing: false,
+	start: function(time), update: function(time), pause: function(time), unpause: function(time) };
+.start(time) // resets frame to 0
+.update(time) // calculates index for given time, unless paused
+.pause(time) // no longer changes frames
+.unpause(time) // resumes frame timing as if no time has passed since pausing
+
