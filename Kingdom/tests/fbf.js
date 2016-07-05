@@ -6,7 +6,7 @@ var fbf = require("../fbf.js"), sprite = require("../sprite.js");
 fbf instanceof Function; ///
 
 var time;
-var f = fbf(10, 4);
+var f = fbf(10, 4); // fDur, fCount
 f.start instanceof Function; ///
 
 f.start(10); f.index === 0; ///
