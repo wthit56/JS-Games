@@ -1,11 +1,11 @@
-loadImage(template, files, oncomplete)
+# loadImage(template, files, oncomplete)
 template : "before %f after", "%f" = filename
 files: ["filename", "filename2"]
 oncomplete: function(progress), context = last image to load
 	progress = { complete: bool, loaded: int, total: int, template: str, images: obj hash, oncomplete: function }
 returns = {} // TODO
 
-drawImage(ctx), context = used as configuration for drawing
+# drawImage(ctx), context = used as configuration for drawing
 ctx : 2D canvas context
 usage = { img: Image,
 	src: { pos: { x: int, y: int }, size: { x: int, y: int } },
@@ -13,13 +13,13 @@ usage = { img: Image,
 	draw: drawImage
 }
 
-sprite(Image, frameSize)
+# sprite(Image, frameSize)
 Image: image for source size reference
 frameSize : { x: int, y: int }
 returns = [srcPos, srcPos, ...]
 	srcPos : { x: int, y: int }
 
-fbf(fDur, fCount)
+# fbf(fDur, fCount)
 fDur : ms duration of each frame
 fCount : number of frames in the animation
 returns =  { duration: fDur, count: fCount, index: int[0 - (fCount-1)],
@@ -29,4 +29,20 @@ returns =  { duration: fDur, count: fCount, index: int[0 - (fCount-1)],
 .update(time) // calculates index for given time, unless paused
 .pause(time) // no longer changes frames
 .unpause(time) // resumes frame timing as if no time has passed since pausing
+
+# time(startTime)
+startTime : changes when in realtime the simtime is counted
+realtime : current time in the real world, used for simulation time at variable speeds
+	each time realtime is given, the simulation continues to that time 
+
+.time // (default : 0) current simulated time
+.speed // (default : 1) current speed simtime is changed based on 
+
+.update(realtime) // updates simtime
+.setSpeed(realtime, newSpeed) // how fast simtime changes relative to realtime
+	// eg. .setSpeed(6, -5) .time == 3 .update(8) .time == -7
+	// eg. .setSpeed(0, 0) .time == 4 .update(15) .time == 4
+.resetTime(realtime) // zeroes simtime from realtime onward
+	// eg. .setSpeed(0, 1) .time == 0 .resetTime(10) .update(15) .time == 5
+
 
