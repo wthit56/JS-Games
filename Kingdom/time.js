@@ -13,19 +13,21 @@ time = function(from) {
 			else {
 				lastrealtime = realtime;
 				
-				// var oldtime = time;
-				time = (offsetT + ((realtime - offsetR) * speed)) - offsetS;
-				// console.log(realtime,":", { oldTime: oldtime, offsetR: offsetR, offsetT: offsetT, offsetS: offsetS, speed: speed }, "=", time);
+				if (speed !== 0) {
+					// var oldtime = time;
+					time = (offsetT + ((realtime - offsetR) * speed)) - offsetS;
+					// console.log(realtime,":", { oldTime: oldtime, offsetR: offsetR, offsetT: offsetT, offsetS: offsetS, speed: speed }, "=", time);
+				}
 			}
 		},
 		setSpeed: function(realtime, _speed) {
-			result.update(realtime);
+			if (realtime !== lastrealtime) { result.update(realtime); }
 			offsetR = realtime;
 			offsetT = time;
 			speed = _speed;
 		},
 		resetTime: function(realtime) {
-			result.update(realtime);
+			if (realtime !== lastrealtime) { result.update(realtime); }
 			time = 0;
 			offsetR = realtime;
 			offsetT = time;
