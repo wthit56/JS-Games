@@ -1,35 +1,51 @@
+if (typeof time === "undefined") { time = require("./time.js"); }
+
 fbf = (function() {
-	function fbf(fDur, fCount) {
-		return { duration: fDur, count: fCount,
-			started: 0, index: 0, paused: 0, playing: false,
-			start: fbfStart, update: fbfUpdate, pause: fbfPause, unpause: fbfUnpause };
-	}
-	
-	function fbfStart(time) {
-		if (this.playing) { throw "FBF: Cannot start while playing."; }
-		else {
-			this.started = time;
-			this.playing = true;
-			this.index = 0;
+	function fbf(fps, fCount, realtime) {
+		realtime = realtime || 0;
+		var speed = fps / 1000;
+		
+		var t = time(realtime);
+		t.setSpeed(realtime, speed);
+		t.resetTime(realtime);
+		
+		var index = 0;
+		function updateIndex() {
+			index = (t.time % fCount) | 0;
+			// console.log(time, t.time, index);
 		}
+		
+		var playing = false;
+		return Object.create(null, {
+			t: { value: t },
+			
+			index: { get: function() { return index; } },
+			playing: { get: function() { return playing; } },
+			
+			update: { value: function(time) {
+				t.update(time);
+				updateIndex();
+			} },
+			
+			start: { value: function(time) {
+				t.resetTime(time);
+				this.unpause(time);
+			} },
+			pause: { value: function(time) {
+				if (!playing) { throw "FBF: Not playing." }
+				t.setSpeed(time, 0);
+				playing = false;
+				updateIndex();
+			} },
+			unpause: { value: function(time) {
+				if (playing) { throw "FBF: Already playing."; }
+				t.setSpeed(time, speed);
+				playing = true;
+				updateIndex();
+			} }
+		});
 	}
-	function fbfUpdate(time) {
-		if (this.playing) {
-			this.index = (((time - this.started) / this.duration) % this.count) | 0;
-		}
-	}
-	function fbfPause(time) {
-		if (!this.playing) { throw "FBF: Cannot pause while not playing."; }
-		this.update(time);
-		this.playing = false;
-		this.paused = time;
-	}
-	function fbfUnpause(time) {
-		if (this.playing) { throw "FBF: Cannot unpause while playing."; }
-		this.playing = true;
-		this.started += (time - this.paused);
-	}
-	
+
 	return fbf;
 })();
 
