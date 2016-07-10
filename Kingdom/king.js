@@ -16,9 +16,10 @@ king = (function() {
 			inited = true;
 		},
 
-		update: function(timeDiff, time) {
+		update: function(time) {
 			if (!inited) { return; }
 			//this.image.dest.pos.x = -64 + (((time - startTime) * (35 / 1000)) % (canvas.width + 64));
+			// console.log(time);
 			walk.update(time);
 			this.image.src.pos = sheet[walk.index];
 		},
