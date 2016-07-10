@@ -9,7 +9,7 @@ king = (function() {
 			};
 			img.src = { pos: { x: 0, y: 0 }, size: { x: 64, y: 64 } };
 			sheet = sprite(img.img, img.src.size);
-			walk = fbf(1000 / 10, 8);
+			walk = fbf(10, 8);
 			
 			walk.start(time);
 			startTime = time;
