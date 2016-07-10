@@ -1,5 +1,5 @@
 if (typeof time === "undefined") { time = require("./time.js"); }
-
+ 
 fbf = (function() {
 	function fbf(fps, fCount, realtime) {
 		realtime = realtime || 0;
