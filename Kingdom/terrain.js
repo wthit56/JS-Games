@@ -1,10 +1,26 @@
 terrain = (function() {
+	var result = {
+		init: function(time, csImg) {
+			cobblestones(csImg);
+			this.init = null;
+		},
+		
+		update: function(time) {
+			cobblestones.update(time);
+		},
+		draw: {
+			back: function(ctx) {},
+			front: function(ctx) {
+				cobblestones.draw(ctx);
+			}
+		}
+	};
+	
 	var cobblestones = function(srcImg) {
-		var img = document.createElement("CANVAS");
-		img.width = 64; img.height = 27;
-		img = img.getContext("2d");
-		img.drawImage(srcImg, -31, -4);
-		img = ctx.createPattern(img.canvas, "repeat-x");
+		var img = ctx.createPattern(
+			cropImage(srcImg, { topLeft: { x: 31, y: 4 }, bottomRight: { x: 95, y: 31 } }),
+			"repeat-x"
+		);
 
 		var offset = { x: 0, y: 0 },
 			rect = {
@@ -26,21 +42,5 @@ terrain = (function() {
 		};
 	};
 	
-	var inited = false;
-	return {
-		init: function(time, csImg) {
-			inited = true;
-			cobblestones(csImg);
-		},
-		
-		update: function(time) {
-			cobblestones.update(time);
-		},
-		draw: {
-			back: function(ctx) {},
-			front: function(ctx) {
-				cobblestones.draw(ctx);
-			}
-		}
-	};
+	return result;
 })();
