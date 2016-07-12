@@ -11,12 +11,15 @@ t.time = 3; t.time === 0; ///
 t.speed = 10; t.speed === 1; ///
 
 // .update(realtime) - updates simtime
-error(function() { t.update(-1); }); /// backwards realtime
+error(function() { t.update(-1); }); /// realtime past hard change
+// hard changes are made by .setSpeed or .resetTime
 t.update(1); t.time === 1; ///
 t.update(5); t.time === 5; ///
 
 // .setSpeed(realtime, newSpeed) - how fast simtime changes relative to realtime
-error(function() { t.setSpeed(4, 1); }); /// backwards realtime
+t.setSpeed(4, 1); // backwards realtime still sets
+	t.time === 4; ///
+	t.speed === 1; ///
 t.setSpeed(6, 2);
 	t.time === 6; ///
 	t.speed === 2; ///
@@ -39,7 +42,7 @@ t.update(302); t.time === -405; ///
 t.setSpeed(305, 1);
 	t.time === -409.5; ///
 	t.speed === 1; ///
-error(function() { t.update(302); }); /// backwards realtime
+error(function() { t.update(302); }); /// earlier than hard change
 t.update(307); t.time === -407.5; ///
 
 // .resetTime(realtime) -- zeroes simtime from realtime onward

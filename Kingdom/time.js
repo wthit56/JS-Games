@@ -9,7 +9,7 @@ time = function(from) {
 	
 	var result = {
 		update: function(realtime) {
-			if (realtime < lastrealtime) { throw new Error("Realtime cannot move backwards."); }
+			if (realtime < offsetR) { throw new Error("Realtime cannot move backwards (" + realtime + " from " + offsetR + ")."); }
 			else {
 				lastrealtime = realtime;
 				
