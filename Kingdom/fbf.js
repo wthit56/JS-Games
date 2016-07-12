@@ -12,7 +12,6 @@ fbf = (function() {
 		var index = 0;
 		function updateIndex() {
 			index = (t.time % fCount) | 0;
-			// console.log(time, t.time, index);
 		}
 		
 		var playing = false;
@@ -32,19 +31,24 @@ fbf = (function() {
 				this.unpause(time);
 			} },
 			pause: { value: function(time) {
-				if (!playing) { throw "FBF: Not playing." }
 				t.setSpeed(time, 0);
 				playing = false;
 				updateIndex();
 			} },
 			unpause: { value: function(time) {
-				if (playing) { throw "FBF: Already playing."; }
 				t.setSpeed(time, speed);
 				playing = true;
 				updateIndex();
 			} }
 		});
 	}
+
+	var emptyFunc = function() {};
+	fbf.single = {
+		index: 0,
+		playing: true,
+		update: emptyFunc, start: emptyFunc, pause: emptyFunc, unpause: emptyFunc
+	};
 
 	return fbf;
 })();
