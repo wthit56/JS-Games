@@ -34,15 +34,16 @@ returns =  { duration: fDur, count: fCount, index: int[0 - (fCount-1)],
 startTime : changes when in realtime the simtime is counted
 realtime : current time in the real world, used for simulation time at variable speeds
 	each time realtime is given, the simulation continues to that time 
-
 .time // (default : 0) current simulated time
 .speed // (default : 1) current speed simtime is changed based on 
-
 .update(realtime) // updates simtime
 .setSpeed(realtime, newSpeed) // how fast simtime changes relative to realtime
+	// (hard change)
 	// eg. .setSpeed(6, -5) .time == 3 .update(8) .time == -7
 	// eg. .setSpeed(0, 0) .time == 4 .update(15) .time == 4
 .resetTime(realtime) // zeroes simtime from realtime onward
+	// (hard change)
 	// eg. .setSpeed(0, 1) .time == 0 .resetTime(10) .update(15) .time == 5
+// hard changes mean that the way simtime is calculated has been changed from this realtime. this makes it impossible to calculate simtimes before that point
 
 
