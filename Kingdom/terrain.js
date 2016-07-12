@@ -28,9 +28,14 @@ terrain = (function() {
 				size: { x: canvas.width - 20, y: 27 }
 			};
 		
+		var oldTime = performance.now();
 		cobblestones = {
 			update: function(time) {
-				offset.x = (time * 8 / 1000);
+				if (king.walking) {
+					offset.x += ((time - oldTime) * 8 / 1000);
+					// console.log(offset.x);
+				}
+				oldTime = time;
 			},
 			draw: function() {
 				ctx.fillStyle = img;
