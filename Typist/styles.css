@@ -1,0 +1,5 @@
+key { background:#eee; border:2px solid #eee; margin:-2px; border-radius:2px; }
+key.mid { border-color:#ccc; }
+key.off { background:none; border-color:transparent; }
+	key .on { text-decoration:underline; }
+	key .off {}
