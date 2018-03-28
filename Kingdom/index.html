@@ -10,11 +10,17 @@
 <script src="king.js" type="text/javascript"></script>
 <script src="terrain.js" type="text/javascript"></script>
 
-<body></body>
 <div id="controls">
 	<a href="https://github.com/noio/kingdom/tree/master/assets/gfx" target="_blank">Graphics</a> and design by <a href="http://www.noio.nl/" target="_blank">noio</a>, as released for the <a href="http://www.noio.nl/2013/10/kingdom/" target="_blank">Flash demo version</a> of <a href="http://store.steampowered.com/app/368230" target="_blank">Kingdom</a>.
 	<br />
 	<label for="speed">Speed:</label><input type="range" value="1" min="0.1" max="3" step="0.1" oninput="speedChange = this.value;" id="speed" /><span id="speed-value">1</span><input type="button" value="Reset" onclick="var s = document.getElementById('speed'); s.value = 1; s.oninput();" />
+	<br />
+	<label for="anim-loop">Loop Animation:</label><input type="checkbox" id="anim-loop" checked />
+	<ul>
+		<li><input type="radio" name="anim" value="walk" id="anim-walk" /><label for="anim-walk">Walk</label></li>
+		<li><input type="radio" name="anim" value="stand" id="anim-stand" /><label for="anim-stand">Stand</label></li>
+		<li><input type="radio" name="anim" value="graze" id="anim-graze" /><label for="anim-graze">Graze</label></li>
+	</ul>
 </div>
 
 <script type="text/javascript">
@@ -33,6 +39,7 @@
 	});
 	
 	function frame(now) {
+		now = performance.now();
 		// console.log("frame", now);
 		t.update(now);
 		// console.log(time.time);

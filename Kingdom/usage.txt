@@ -19,7 +19,7 @@ frameSize : { x: int, y: int }
 returns = [srcPos, srcPos, ...]
 	srcPos : { x: int, y: int }
 
-# fbf(fDur, fCount)
+# fbf(fDur, fCount) - uses time()
 fDur : ms duration of each frame
 fCount : number of frames in the animation
 returns =  { duration: fDur, count: fCount, index: int[0 - (fCount-1)],

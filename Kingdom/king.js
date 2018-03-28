@@ -14,7 +14,9 @@ king = (function() {
 				this.current.fbf.update(time);
 				// console.log(time, this.current.fbf.index, this.current.fbf.t ? this.current.fbf.t.time : "");
 			},
-			index: function() { return this.current.frames[this.current.fbf.index]; }
+			index: function() {
+				return this.current.frames[this.current.fbf.index];
+			}
 		};
 		
 	var cycle = ["walk", "stand", "graze"]; cycle.current = 0; cycle.change = NaN;
@@ -28,7 +30,7 @@ king = (function() {
 			
 			anim.start(time, "walk");
 			setInterval(function() { // demo
-				cycle.change = true;
+				cycle.change = performance.now();
 			}, 1000);
 			
 			inited = true;
@@ -38,12 +40,12 @@ king = (function() {
 		update: function(time) {
 			if (!inited) { return; }
 			
-			if (cycle.change) {
+			if (!isNaN(cycle.change)) {
 				cycle.current = (cycle.current + 1) % cycle.length;
 				result.walking = (cycle[cycle.current] === "walk");
 				
-				anim.start(time, cycle[cycle.current]);
-				cycle.change = false;
+				anim.start(cycle.change, cycle[cycle.current]);
+				cycle.change = NaN;
 			}
 			anim.update(time);
 			this.image.src.pos = sheet[anim.index()];
