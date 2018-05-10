@@ -1,0 +1,23 @@
+<!doctype html>
+<link href="styles.css" rel="stylesheet" />
+<script src="engine.js"></script>
+<body>
+<script>
+
+var start = passage(
+	`Blah, introduction sdlf hjlskdfdlksfj ldsjfldsjfl lkdsjf lkdsfj dslkf jlsdjf ldsf lsd fjl 2197863292304320943280948 0932840923 40923 840923 89
+
+	New para
+	- newline
+	- newline 2
+
+	And now, some choices...`,
+    choice(`Door number 1`, passage.promise("")),
+    choice(`Door number 2`)
+);
+
+start.run();
+
+
+
+</script>
